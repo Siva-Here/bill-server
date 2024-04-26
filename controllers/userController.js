@@ -122,19 +122,21 @@ const fetchBills = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { username, password } = req.body;
+    console.log(username);
+    console.log(password);
 
     if (!username || !password || typeof username !== 'string' || typeof password !== 'string') {
       return res.status(400).json({ message: "Invalid username or password format" });
     }
 
     const user = await User.findOne({ username });
-
+    console.log('user check',user)
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const matchPwd = await bcrypt.compare(password, user.password);
-
+    console.log('matchPwd',matchPwd);
     if (!matchPwd) {
       return res.status(401).json({ message: "Invalid credentials" });
     }

@@ -80,11 +80,9 @@ const register = async (req, res) => {
             return res.status(400).send('Username already exists.');
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-
         const newUser = new User({
             username: username,
-            password: hashedPassword,
+            password: password,
             role: role,
             isAdmin: true,
         });
@@ -121,11 +119,10 @@ const addUser = async (req, res) => {
             return res.status(400).send('Username already exists.');
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
             username: username,
-            password: hashedPassword,
+            password: password,
             role: role,
             isAdmin: false,
         });
