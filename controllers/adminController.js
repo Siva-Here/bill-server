@@ -50,7 +50,7 @@ const login = async (req, res) => {
 
         await user.save();
 
-        res.status(200).json({ username: user.username });
+        res.status(200).json({ username: user.username, jwtToken: token });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Internal service error" });
