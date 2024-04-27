@@ -45,7 +45,7 @@ const login = async (req, res) => {
         res.cookie("jwt", token, {
             expires: new Date(Date.now() + 300000000000000),
             httpOnly: true,
-            // secure: true
+            secure: true
         });
 
         await user.save();
@@ -61,7 +61,7 @@ const login = async (req, res) => {
 const register = async (req, res) => {
     try {
 
-        const { username, password, confirmPassword, role } = req.body;
+        const { username, password, confirmPassword } = req.body;
 
         if (!username || !password || !confirmPassword) {
             return res.status(400).send('Username, password, and confirm password are required.');
@@ -83,7 +83,7 @@ const register = async (req, res) => {
         const newUser = new User({
             username: username,
             password: password,
-            role: role,
+            role: "user",
             isAdmin: true,
         });
 
@@ -100,7 +100,7 @@ const register = async (req, res) => {
 const addUser = async (req, res) => {
     try {
 
-        const { username, password, confirmPassword, role } = req.body;
+        const { username, password, confirmPassword } = req.body;
 
         if (!username || !password || !confirmPassword) {
             return res.status(400).send('Username, password, and confirm password are required.');
@@ -123,7 +123,7 @@ const addUser = async (req, res) => {
         const newUser = new User({
             username: username,
             password: password,
-            role: role,
+            role: "user",
             isAdmin: false,
         });
 
