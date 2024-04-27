@@ -58,7 +58,7 @@ const uploadBill = async (req, res) => {
       }
       const uploadDir = 'secure_uploads/';
       const securePath = uploadDir + req.file.filename;
-      const { name, amount, category, username } = req.body;
+      const { name, amount, category, username,imgLink } = req.body;
       try {
         console.log(req.body);
         fs.mkdirSync(uploadDir, { recursive: true }); 
@@ -68,7 +68,8 @@ const uploadBill = async (req, res) => {
           amount,
           type: category,
           uploadedBy: username,
-          image: `${process.env.IMG_URI}/uploads/${req.file.filename}`,
+          // image: `${process.env.IMG_URI}/uploads/${req.file.filename}`,
+          image:imgLink,
         });
         const savedBill = await newBill.save();
         if (savedBill) {
