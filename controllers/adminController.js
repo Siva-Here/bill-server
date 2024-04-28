@@ -136,7 +136,6 @@ const addUser = async (req, res) => {
     }
 };
 
-
 const fetchAllBills = async (req, res) => {
     // implementation
     try {
@@ -270,6 +269,18 @@ const getUserStats = async (req, res) => {
     }
 };
 
+const fetchUsers = async(req,res)=>{
+    try{
+        const users=await User.find({},{username:1,_id:0});
+        console.log(users)
+        res.status(200).json(users)
+    }
+    catch(err){
+
+        console.error(err.message);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
 
 module.exports = {
     login,
@@ -279,5 +290,6 @@ module.exports = {
     changeStatus,
     deleteBill,
     getCategoryStats,
-    getUserStats
+    getUserStats,
+    fetchUsers
 };
