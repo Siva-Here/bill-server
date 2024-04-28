@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const billSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   amount: {
     type: Number,

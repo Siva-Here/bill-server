@@ -40,7 +40,7 @@ const upload = multer({
     }
   },
   limits: {
-    fileSize: 20 * 1024 * 1024 // 20MB limit
+  fileSize: 20 * 1024 * 1024 // 20MB limit
   }
 }).single('file');
 
@@ -68,7 +68,7 @@ const uploadBill = async (req, res) => {
           amount,
           type: category,
           uploadedBy: username,
-          // image: `${process.env.IMG_URI}/uploads/${req.file.filename}`,
+        // image: `${process.env.IMG_URI}/uploads/${req.file.filename}`,
           image:imgLink,
         });
         const savedBill = await newBill.save();
@@ -159,9 +159,37 @@ const login = async (req, res) => {
   }
 };
 
+const deleteBill = async (req, res) => {
+  try {
+  
+    const { billId } = req.body;
+
+
+    if (!billId) {
+      return res.status(400).json({ message: "Bill Id is needed to delete the Bill" });
+    }
+
+
+    const deletedBill = await Bill.findByIdAndDelete(billId);
+
+
+    if (!deletedBill) {
+      return res.status(404).json({ message: "Bill not found in the database" });
+    }
+
+
+    return res.status(200).json({ message: "Bill deleted successfully", deletedBill });
+  } catch (err) {
+    console.error(err);
+
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 
 module.exports = {
   uploadBill,
   fetchBills,
-  login
+  login,
+  deleteBill
 };

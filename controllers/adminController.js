@@ -1,5 +1,5 @@
 // adminController.js
-const mongoose=require('mongoose')
+const mongoose = require('mongoose')
 
 const User = require("../model/Users");
 
@@ -7,7 +7,7 @@ const Bill = require("../model/Bills");
 
 const bcrypt = require('bcrypt');
 
-const validator=require('validator');
+const validator = require('validator');
 
 const login = async (req, res) => {
     try {
@@ -26,11 +26,11 @@ const login = async (req, res) => {
         const user = await User.findOne({ username: username });
 
         if (!user) {
-            
+
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        if (!(user.isAdmin=="true")) {
+        if (!(user.isAdmin == "true")) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
@@ -139,11 +139,11 @@ const addUser = async (req, res) => {
 const fetchAllBills = async (req, res) => {
     // implementation
     try {
-        
+
         const bills = await Bill.find();
         const totalAmountSpent = bills.reduce((total, bill) => total + bill.amount, 0);
         if (bills) {
-            res.status(200).json({count: bills.length, totalAmountSpent ,bills})
+            res.status(200).json({ count: bills.length, totalAmountSpent, bills })
         }
         else {
             res.status(200).json({
@@ -269,17 +269,42 @@ const getUserStats = async (req, res) => {
     }
 };
 
-const fetchUsers = async(req,res)=>{
-    try{
-        const users=await User.find({},{username:1,_id:0});
+const fetchUsers = async (req, res) => {
+    try {
+        const users = await User.find({}, { username: 1, _id: 0 });
         console.log(users)
         res.status(200).json(users)
     }
-    catch(err){
+    catch (err) {
 
         console.error(err.message);
         res.status(500).json({ message: "Internal Server Error" });
     }
+}
+
+const deleteUser = async (req, res) => {
+    try {
+        const { username } = req.body
+        console.log(username);
+        if (!username) {
+            return res.status(400).json({ message: "username is required to delete the bill" });
+        }
+        
+        const matchUser =await User.findOne({username})
+        if (!matchUser) {
+            return res.status(400).json({ message: "Match Not Found" })
+        }
+        
+        const deletedUser = await User.findByIdAndDelete(matchUser._id)
+        console.log('deleted User is ', deletedUser);
+        return res.status(200).json({ message: "user deleted Sucessfully ", username: deletedUser.username })
+        
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Internal Server Error" })
+    }
+
 }
 
 module.exports = {
@@ -291,5 +316,6 @@ module.exports = {
     deleteBill,
     getCategoryStats,
     getUserStats,
-    fetchUsers
+    fetchUsers,
+    deleteUser
 };

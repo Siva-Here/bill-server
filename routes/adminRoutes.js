@@ -26,4 +26,6 @@ router.post("/stats/user", authAdminToken, adminController.getUserStats);
 
 router.get("/users",authAdminToken,adminController.fetchUsers);
 
+router.delete("/deleteUser",authAdminToken,adminController.deleteUser);
+
 module.exports = router;
