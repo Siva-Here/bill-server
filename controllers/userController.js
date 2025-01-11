@@ -64,6 +64,7 @@ console.log(req.body)
         billType, 
         billNumber, 
         category, 
+        name,
         firmName, 
         date, 
         amount, 
@@ -71,6 +72,7 @@ console.log(req.body)
         imgLink 
       } = req.body;
       console.log("imglink is",imgLink);
+      console.log("body is:",req.body);
       try {
         
         fs.mkdirSync(uploadDir, { recursive: true }); 
@@ -85,6 +87,7 @@ console.log(req.body)
           billType,
           billNumber,
           category,
+          name,
           firmName,
           date,
           amount,

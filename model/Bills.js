@@ -29,6 +29,10 @@ const mongoose = require("mongoose");
 // });
 
 const billSchema = new mongoose.Schema({
+  name: {
+        type: String,
+        required: true,
+  },
   billType: {
     type: String,
     required: true,
@@ -39,7 +43,18 @@ const billSchema = new mongoose.Schema({
   },
   billNumber: {
     type: String,
-    required: true,
+    required: function () {
+      return this.billType === "GST";
+    }, // Bill number is required only if billType is "GST"
+    validate: {
+      validator: function (value) {
+        if (this.billType === "GST") {
+          return value && value.trim().length > 0;
+        }
+        return true; // If not GST, no need for validation
+      },
+      message: "Bill number is required for GST bills.",
+    },
   },
   category: {
         type: String,
