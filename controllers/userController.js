@@ -45,6 +45,7 @@ const upload = multer({
 }).single('file');
 
 const uploadBill = async (req, res) => {
+console.log(req.body)
   try {
     upload(req, res, async (err) => {
       if (err) {
@@ -54,22 +55,42 @@ const uploadBill = async (req, res) => {
         return res.status(400).json({ error: err.message });
       }
       if (!req.file) {
-        return res.status(400).json({ error: 'No file uploaded.' });
+        return res.status(400).json({ error: 'No file uploaded.   chandu' });
       }
       const uploadDir = 'secure_uploads/';
       const securePath = uploadDir + req.file.filename;
-      const { name, amount, category, username,imgLink } = req.body;
+      // const { name, amount, category, username,imgLink } = req.body;
+      const { 
+        billType, 
+        billNumber, 
+        category, 
+        firmName, 
+        date, 
+        amount, 
+        username, 
+        imgLink 
+      } = req.body;
+      console.log("imglink is",imgLink);
       try {
-        console.log(req.body);
+        
         fs.mkdirSync(uploadDir, { recursive: true }); 
         fs.renameSync(req.file.path, securePath);
         const newBill = new Bill({
-          name,
+          // name,
+          // amount,
+          // type: category,
+          // uploadedBy: username,
+          // image:imgLink,
+
+          billType,
+          billNumber,
+          category,
+          firmName,
+          date,
           amount,
-          type: category,
           uploadedBy: username,
-        // image: `${process.env.IMG_URI}/uploads/${req.file.filename}`,
           image:imgLink,
+
         });
         const savedBill = await newBill.save();
         if (savedBill) {
@@ -82,6 +103,8 @@ const uploadBill = async (req, res) => {
             return res.status(404).json({ error: 'User not found.' });
           }
         }
+
+        console.log(req.body);
         res.status(201).json(savedBill);
       } catch (error) {
         console.error('Error storing file:', error);
