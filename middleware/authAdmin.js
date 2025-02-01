@@ -8,6 +8,8 @@ const authAdminToken = async (req, res, next) => {
             return res.status(401).send("Token not found or invalid format...");
         }
         
+        
+
         const token = jwtToken.split(" ")[1];
         let verifyUser;
         try {

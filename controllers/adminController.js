@@ -307,6 +307,56 @@ const deleteUser = async (req, res) => {
 
 }
 
+
+const fetchApprovedBillsByAmount = async (req, res) => {
+    try {
+        console.log("i am inside")
+        let { amount } = req.body; // Amount from frontend
+        console.log("amount is:",amount);
+
+        if (!amount || isNaN(amount) || amount <= 0) {
+            return res.status(400).json({ message: "Invalid amount" });
+        }
+
+        // Fetch only approved bills
+        const bills = await Bill.find({ status: "approved" });
+
+
+        if (!bills.length) {
+            return res.status(404).json({ message: "No approved bills available" });
+        }
+
+        // Sort bills in descending order based on amount (greedy approach)
+        bills.sort((a, b) => b.amount - a.amount);
+
+        let selectedBills = [];
+        let currentSum = 0;
+
+        for (let bill of bills) {
+            if (currentSum + bill.amount <= amount) {
+                selectedBills.push(bill);
+                currentSum += bill.amount;
+            }
+
+            // If we reach an amount close enough to the target (within 95%), break
+            if (currentSum >= amount * 0.95) {
+                break;
+            }
+        }
+
+        res.status(200).json({
+            totalSelectedAmount: currentSum,
+            selectedBills,
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+
+
+
 module.exports = {
     login,
     register,
@@ -317,5 +367,6 @@ module.exports = {
     getCategoryStats,
     getUserStats,
     fetchUsers,
-    deleteUser
+    deleteUser,
+    fetchApprovedBillsByAmount
 };

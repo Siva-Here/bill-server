@@ -62,7 +62,8 @@ console.log(req.body)
       // const { name, amount, category, username,imgLink } = req.body;
       const { 
         billType, 
-        billNumber, 
+        billNumber,
+        GstNumber, 
         category, 
         name,
         firmName, 
@@ -86,6 +87,7 @@ console.log(req.body)
 
           billType,
           billNumber,
+          GstNumber,
           category,
           name,
           firmName,

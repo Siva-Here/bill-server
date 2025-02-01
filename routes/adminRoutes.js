@@ -28,4 +28,6 @@ router.get("/users",authAdminToken,adminController.fetchUsers);
 
 router.delete("/deleteUser",authAdminToken,adminController.deleteUser);
 
+router.post("/search",authAdminToken, adminController.fetchApprovedBillsByAmount)
+
 module.exports = router;

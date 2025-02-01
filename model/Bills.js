@@ -43,6 +43,10 @@ const billSchema = new mongoose.Schema({
   },
   billNumber: {
     type: String,
+    required: true,
+},
+  GstNumber: {
+    type: String,
     required: function () {
       return this.billType === "GST";
     }, // Bill number is required only if billType is "GST"
