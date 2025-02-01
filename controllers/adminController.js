@@ -310,7 +310,7 @@ const deleteUser = async (req, res) => {
 
 const fetchApprovedBillsByAmount = async (req, res) => {
     try {
-        console.log("i am inside")
+    
         let { amount } = req.body; // Amount from frontend
         console.log("amount is:",amount);
 
@@ -319,11 +319,11 @@ const fetchApprovedBillsByAmount = async (req, res) => {
         }
 
         // Fetch only approved bills
-        const bills = await Bill.find({ status: "approved" });
+        const bills = await Bill.find({ status: "accepted" });
 
-
+        
         if (!bills.length) {
-            return res.status(404).json({ message: "No approved bills available" });
+            return res.status(404).json({ message: "No approved bills availableee" });
         }
 
         // Sort bills in descending order based on amount (greedy approach)

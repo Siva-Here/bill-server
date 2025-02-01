@@ -3,6 +3,7 @@ const User = require('../model/Users');
 
 const authenticateToken = async (req, res, next) => {
     try {
+        console.log(req)
         const jwtToken = req.headers.authorization;
         if (!jwtToken || !jwtToken.startsWith('Bearer ')) {
             return res.status(401).send("Token not found or invalid format...");
