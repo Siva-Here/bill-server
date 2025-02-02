@@ -9,6 +9,28 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    validate: {
+      validator: function (value) {
+        return /^[nN]\d{6}@rguktn\.ac\.in$/.test(value);
+      },
+      message: "Please enter a valid RGUKTN email (e.g., n200000@rguktn.ac.in)",
+    },
+  },
+  mobile: {
+    type: String,
+    required: true,
+    unique: true,
+    validate: {
+      validator: function (value) {
+        return /^\d{10}$/.test(value); // Ensures exactly 10-digit numbers
+      },
+      message: "Mobile number must be exactly 10 digits.",
+    },
+  },
   password: {
     type: String,
     required: true,

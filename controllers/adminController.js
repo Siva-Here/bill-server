@@ -100,9 +100,10 @@ const register = async (req, res) => {
 const addUser = async (req, res) => {
     try {
 
-        const { username, password, confirmPassword } = req.body;
+        const { username, password, confirmPassword, mobile, email} = req.body;
+    
 
-        if (!username || !password || !confirmPassword) {
+        if (!username || !password || !confirmPassword || !mobile || !email) {
             return res.status(400).send('Username, password, and confirm password are required.');
         }
 
@@ -123,6 +124,8 @@ const addUser = async (req, res) => {
         const newUser = new User({
             username: username,
             password: password,
+            mobile:mobile,
+            email:email,
             role: "user",
             isAdmin: false,
         });
