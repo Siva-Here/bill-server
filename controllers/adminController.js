@@ -11,7 +11,8 @@ const validator = require('validator');
 
 const login = async (req, res) => {
     try {
-
+        
+        console.log("hghghgh");
         const username = req.body.username;
 
         const password = req.body.password;
@@ -24,6 +25,7 @@ const login = async (req, res) => {
         }
 
         const user = await User.findOne({ username: username });
+        console.log(user)
 
         if (!user) {
 
@@ -41,6 +43,7 @@ const login = async (req, res) => {
         }
 
         const token = await user.generateAuthToken();
+        console.log(token)
 
         res.cookie("jwt", token, {
             expires: new Date(Date.now() + 300000000000000),
@@ -48,7 +51,7 @@ const login = async (req, res) => {
             secure: true
         });
 
-        await user.save();
+        // await user.save();
 
         res.status(200).json({ username: user.username, jwtToken: token });
     } catch (err) {
