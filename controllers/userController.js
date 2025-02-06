@@ -151,6 +151,7 @@ const fetchBills = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { username, password } = req.body;
+    console.log(req)
     console.log(username);
     console.log(password);
 
@@ -178,7 +179,7 @@ const login = async (req, res) => {
       secure: true
     });
 
-    await user.save();
+    // await user.save();
 
     res.status(200).json({ username: user.username ,token});
   } catch (err) {
