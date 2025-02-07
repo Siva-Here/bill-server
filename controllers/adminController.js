@@ -314,11 +314,56 @@ const deleteUser = async (req, res) => {
 }
 
 
+// const fetchApprovedBillsByAmount = async (req, res) => {
+//     try {
+    
+//         let { amount } = req.body; // Amount from frontend
+//         console.log("amount is:",amount);
+
+//         if (!amount || isNaN(amount) || amount <= 0) {
+//             return res.status(400).json({ message: "Invalid amount" });
+//         }
+
+//         // Fetch only approved bills
+//         const bills = await Bill.find({ status: "accepted" });
+
+        
+//         if (!bills.length) {
+//             return res.status(404).json({ message: "No approved bills availableee" });
+//         }
+
+//         // Sort bills in descending order based on amount (greedy approach)
+//         bills.sort((a, b) => b.amount - a.amount);
+
+//         let selectedBills = [];
+//         let currentSum = 0;
+
+//         for (let bill of bills) {
+//             if (currentSum + bill.amount <= amount) {
+//                 selectedBills.push(bill);
+//                 currentSum += bill.amount;
+//             }
+
+//             // If we reach an amount close enough to the target (within 95%), break
+//             if (currentSum >= amount * 0.95) {
+//                 break;
+//             }
+//         }
+
+//         res.status(200).json({
+//             totalSelectedAmount: currentSum,
+//             selectedBills,
+//         });
+//     } catch (err) {
+//         console.error(err.message);
+//         res.status(500).json({ message: "Internal Server Error" });
+//     }
+// };
+
 const fetchApprovedBillsByAmount = async (req, res) => {
     try {
-    
         let { amount } = req.body; // Amount from frontend
-        console.log("amount is:",amount);
+        console.log("Requested amount is:", amount);
 
         if (!amount || isNaN(amount) || amount <= 0) {
             return res.status(400).json({ message: "Invalid amount" });
@@ -327,38 +372,48 @@ const fetchApprovedBillsByAmount = async (req, res) => {
         // Fetch only approved bills
         const bills = await Bill.find({ status: "accepted" });
 
-        
         if (!bills.length) {
-            return res.status(404).json({ message: "No approved bills availableee" });
+            return res.status(404).json({ message: "No approved bills available" });
         }
 
-        // Sort bills in descending order based on amount (greedy approach)
-        bills.sort((a, b) => b.amount - a.amount);
+        // Sort bills in ascending order based on amount
+        bills.sort((a, b) => a.amount - b.amount);
 
         let selectedBills = [];
         let currentSum = 0;
+        let index = 0;
 
-        for (let bill of bills) {
-            if (currentSum + bill.amount <= amount) {
-                selectedBills.push(bill);
-                currentSum += bill.amount;
-            }
-
-            // If we reach an amount close enough to the target (within 95%), break
-            if (currentSum >= amount * 0.95) {
-                break;
-            }
+        // Step 1: Add bills until the sum is <= requested amount
+        while (index < bills.length && currentSum + bills[index].amount <= amount) {
+            selectedBills.push(bills[index]);
+            currentSum += bills[index].amount;
+            index++;
         }
 
-        res.status(200).json({
-            totalSelectedAmount: currentSum,
-            selectedBills,
-        });
+        let closestSumBelow = currentSum;
+        let bestBillsBelow = [...selectedBills];
+
+        // Step 2: Try adding one more bill if available
+        if (index < bills.length) {
+            let closestSumAbove = currentSum + bills[index].amount;
+            let bestBillsAbove = [...selectedBills, bills[index]];
+
+            // Step 3: Compare both sums and return the closer one
+            if (Math.abs(amount - closestSumBelow) <= Math.abs(amount - closestSumAbove)) {
+                res.status(200).json({ totalSelectedAmount: closestSumBelow, selectedBills: bestBillsBelow });
+            } else {
+                res.status(200).json({ totalSelectedAmount: closestSumAbove, selectedBills: bestBillsAbove });
+            }
+        } else {
+            // No extra bill available, return what we have
+            res.status(200).json({ totalSelectedAmount: closestSumBelow, selectedBills: bestBillsBelow });
+        }
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ message: "Internal Server Error" });
     }
 };
+
 
 
 
