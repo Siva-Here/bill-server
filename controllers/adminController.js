@@ -12,6 +12,7 @@ const validator = require('validator');
 const login = async (req, res) => {
     try {
         
+        console.log(req);
         console.log("hghghgh");
         const username = req.body.username;
 
@@ -49,7 +50,6 @@ const login = async (req, res) => {
             expires: new Date(Date.now() + 300000000000000),
             httpOnly: true,
             secure: true,
-            // sameSite: "None"
         });
 
         // await user.save();
