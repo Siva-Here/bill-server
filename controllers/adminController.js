@@ -67,6 +67,7 @@ const register = async (req, res) => {
 
         const { username, password, confirmPassword } = req.body;
 
+        console.log(username, password, confirmPassword);
         if (!username || !password || !confirmPassword) {
             return res.status(400).send('Username, password, and confirm password are required.');
         }
@@ -105,7 +106,7 @@ const addUser = async (req, res) => {
     try {
 
         const { username, password, confirmPassword, mobile, email} = req.body;
-    
+        console.log(req.body);
 
         if (!username || !password || !confirmPassword || !mobile || !email) {
             return res.status(400).send('Username, password, and confirm password are required.');
