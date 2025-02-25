@@ -21,7 +21,10 @@ const userRoutes = require('../routes/userRoutes');
 
 app.use(express.json()); 
 
-app.use(cors({ credentials: true })); 
+// app.use(cors({ credentials: true })); 
+app.use(cors({ origin: '*' })); // Allows all origins explicitly
+
+
 
 
 app.use('/uploads', express.static('secure_uploads'));
