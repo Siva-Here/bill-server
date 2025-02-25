@@ -21,8 +21,19 @@ const userRoutes = require('../routes/userRoutes');
 
 app.use(express.json()); 
 
+
+// app.use(cors({
+//   origin: "*", // Allows all origins
+//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//   allowedHeaders: ["Content-Type", "Authorization"],
+//   credentials: true // Allows cookies & authentication headers
+// }));
+
+// ✅ Handle preflight requests properly
+// app.options("*", cors());
+
 // app.use(cors({ credentials: true })); 
-app.use(cors('*')); // Allows all origins explicitly
+app.use(cors('*')); 
 
 
 
