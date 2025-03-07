@@ -48,8 +48,12 @@ const userSchema = new mongoose.Schema({
       message: "Invalid user type...",
     },
   },
+  // isAdmin: {
+  //   type: String,
+  //   default: false
+  // },
   isAdmin: {
-    type: String,
+    type:Boolean,
     default: false
   },
   billsSubmitted: [{

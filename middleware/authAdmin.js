@@ -8,7 +8,6 @@ const authAdminToken = async (req, res, next) => {
             return res.status(401).send("Token not found or invalid format...");
         }
         
-    
 
         const token = jwtToken.split(" ")[1];
         let verifyUser;
@@ -19,10 +18,11 @@ const authAdminToken = async (req, res, next) => {
         }
         
         const user = await User.findOne({ _id: verifyUser._id });
-        if (!user || !(user.isAdmin=="true")){
+        console.log(user)
+        console.log("ans is:",user.isAdmin)
+        if (!user || !(user.isAdmin)){
             return res.status(401).send("You are not allowed to do this. You are not an Admin...");
         }
-        
         // If everything is fine, proceed to the next middleware
         next();
     } catch (err) {

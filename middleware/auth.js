@@ -18,6 +18,7 @@ const authenticateToken = async (req, res, next) => {
         }
         
         const user = await User.findOne({ _id: verifyUser._id });
+        console.log("user is",user);
         if (!user) {
             return res.status(401).send("No match found in the database...");
         }

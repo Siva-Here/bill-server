@@ -36,7 +36,7 @@ const billSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: {
-          values: ["printing", "marketing", "travelling", "outside promotions", "stage photography"],
+          values: ["printing", "marketing", "travelling", "outside promotions", "stage photography","InfraStructure"],
           message: "Invalid bill type...",
         },
   },

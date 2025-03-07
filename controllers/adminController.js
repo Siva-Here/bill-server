@@ -65,10 +65,10 @@ const login = async (req, res) => {
 const register = async (req, res) => {
     try {
 
-        const { username, password, confirmPassword } = req.body;
+        const { username,mobile,email, password, confirmPassword } = req.body;
 
         console.log(username, password, confirmPassword);
-        if (!username || !password || !confirmPassword) {
+        if (!username || !password || !confirmPassword || !mobile || !email) {
             return res.status(400).send('Username, password, and confirm password are required.');
         }
 
@@ -81,13 +81,24 @@ const register = async (req, res) => {
         }
 
         const existingUser = await User.findOne({ username: username });
+        const existEmail = await User.findOne({email:email});
+        const existMobile = await User.findOne({mobile:mobile})
         if (existingUser) {
             return res.status(400).send('Username already exists.');
         }
+        if (existEmail) {
+            return res.status(400).send('Email already exists.');
+        }
+        if (existMobile) {
+            return res.status(400).send('Mobile number already exists.');
+        }
+       
 
         const newUser = new User({
             username: username,
             password: password,
+            mobile:mobile,
+            email:email,
             role: "user",
             isAdmin: true,
         });
@@ -121,9 +132,18 @@ const addUser = async (req, res) => {
         }
 
         const existingUser = await User.findOne({ username: username });
+        const existEmail = await User.findOne({email:email});
+        const existMobile = await User.findOne({mobile:mobile})
         if (existingUser) {
             return res.status(400).send('Username already exists.');
         }
+        if (existEmail) {
+            return res.status(400).send('Email already exists.');
+        }
+        if (existMobile) {
+            return res.status(400).send('Mobile number already exists.');
+        }
+        
 
 
         const newUser = new User({
@@ -136,6 +156,7 @@ const addUser = async (req, res) => {
         });
 
         const addedUser = await newUser.save();
+        console.log("addeduser is:",addedUser);
 
         res.status(201).json(addedUser);
     } catch (err) {
