@@ -33,7 +33,7 @@ const login = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        if (!(user.isAdmin == "true")) {
+        if (!(user.isAdmin)) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
